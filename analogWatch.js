@@ -71,17 +71,17 @@ const onSecond = () => {
 
 const onMinute = () => {
   g.setColor(0, 0, 0);
+  // Minute hand
+  hand((360 * (currentDate.getHours() + currentDate.getMinutes() / 60)) / 12, -8, faceWidth - 40);
   // Hour hand
-  hand((360 * (currentDate.getHours() + currentDate.getMinutes() / 60)) / 12, -8, faceWidth * 0.60);
-  // Minute Hand
-  hand((360 * currentDate.getMinutes()) / 60, -8, faceWidth * 0.90);
+  hand((360 * currentDate.getMinutes()) / 60, -8, faceWidth - 10);
   currentDate = new Date();
   g.setColor(1, 0.7, 0.7);
-  // Hour Hand
-  hand((360 * (currentDate.getHours() + currentDate.getMinutes() / 60)) / 12, -8, faceWidth * 0.60);
+  // Minute hand
+  hand((360 * (currentDate.getHours() + currentDate.getMinutes() / 60)) / 12, -8, faceWidth - 40);
   g.setColor(1, 1, 0.8);
-  // Minute Hand
-  hand((360 * currentDate.getMinutes()) / 60, -8, faceWidth * 0.90);
+  // Hour hand
+  hand((360 * currentDate.getMinutes()) / 60, -8, faceWidth - 10);
   if (currentDate.getHours() >= 0 && currentDate.getMinutes() === 0) {
     Bangle.buzz();
   }
@@ -120,7 +120,9 @@ Bangle.on('faceUp', (up) => {
 g.clear();
 Bangle.loadWidgets();
 Bangle.drawWidgets();
-console.log('😎 Nik\'s watch version ', version);
+console.log('Nik\'s watch version ', version);
 startTimers();
+resetSeconds();
+onMinute();
 // Show launcher when middle button pressed
 setWatch(Bangle.showLauncher, BTN2, { repeat: false, edge: "falling" });
