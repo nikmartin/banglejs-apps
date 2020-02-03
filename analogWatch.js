@@ -1,29 +1,30 @@
+
 const version = '0.0.2';
 
 const p = Math.PI / 2;
-const PRad = Math.PI / 180;
+const pRad = Math.PI / 180;
 const hourDegrees = 15;
 const faceWidth = 95; // watch face is 95 px wide (radius)
 let timerInterval = null;
 let currentDate = new Date();
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
-// const g = global.Graphics;
-// const Bangle = global.Bangle; :smile:
+let g;
 
 const seconds = (angle, r) => {
-  const a = angle * PRad;
+  const a = angle * pRad;
   const x = 120 + Math.sin(a) * r;
   const y = 120 - Math.cos(a) * r;
   if (angle % hourDegrees === 0) {
-    g.fillEllipse(x - 2, y - 2, x + 2, y + 2);
+    g.fillCircle(x, y, 4);
   } else {
-    g.fillEllipse(x - 1, y - 1, x + 1, y + 1);
+    g.fillCircle(x, y, 2);
   }
 };
 
 const hand = (angle, r1, r2) => {
-  const a = angle * PRad;
+  const a = angle * pRad;
   const r3 = 3;
+
   g.fillPoly([
     120 + Math.sin(a) * r1,
     120 - Math.cos(a) * r1,
@@ -86,7 +87,14 @@ const onMinute = () => {
     Bangle.buzz();
   }
   g.setColor(1, 1, 1);
-  g.drawString(`${days[currentDate.getDay()]}-${currentDate.getDate().toString().padStart(2, '0')}`, g.getWidth() / 2 + 30, g.getHeight() / 2 + 40);
+  const dayString = days[currentDate.getDay()];
+  let dateString = currentDate.getDate().toString();
+  if (dateString.length == 1) {
+    dateString = `0${dateString}`;
+  }
+  console.log(`${dayString}-${dateString}`);
+
+  g.drawString(`${dayString}-${dateString}`, g.getWidth() / 2 + 30, g.getHeight() / 2 + 40);
 };
 
 const clearTimers = () => {
@@ -121,8 +129,8 @@ g.clear();
 Bangle.loadWidgets();
 Bangle.drawWidgets();
 console.log('Nik\'s watch version ', version);
-startTimers();
 resetSeconds();
-onMinute();
+startTimers();
+
 // Show launcher when middle button pressed
 setWatch(Bangle.showLauncher, BTN2, { repeat: false, edge: "falling" });
